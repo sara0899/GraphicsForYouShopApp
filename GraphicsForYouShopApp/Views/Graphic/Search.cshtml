@@ -1,0 +1,84 @@
+﻿@using GraphicsForYouShopApp.Models;
+
+@{
+    ViewData["Title"] = "Wyszukiwarka";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="projects-container">
+    <div class="search-panel">
+        <input type="search" id="search-input" class="search-panel-input" name="search" placeholder="Czego szukasz?">
+        <i class="fa-solid fa-magnifying-glass fa-2xl fa-category-page"></i>
+    </div>
+    <div class="project-contener-left">
+        <fieldset class="checkbox-filter">      
+            <h2>KATEGORIE</h2>
+            @foreach (Category cat in Model.categoryList){
+                <div><input type="checkbox" name="graphicCategory" value="@cat.Id" id='category+@cat.Id'><span class="filter-name">@cat.Name</span></div>   
+            }
+        </fieldset>   
+
+        <fieldset class="checkbox-filter">      
+            <h2 style="margin-top: 2em;">KOLEKCJE</h2>
+            @foreach (Collection collection in Model.collectionList){
+                <div><input type="checkbox" name="graphicCollection" value="@collection.Id" id='collection+@collection.Id'><span class="filter-name">@collection.Name</span></div> 
+            }
+        </fieldset> 
+
+        <input type="button" class="filter-button" value="Filtruj" onclick="FilterGraphics()" /> 
+        <br />
+        <span><i class="fa-solid fa-xmark" onclick="DeleteFilter()"></i> Usuń filtry</span>
+    </div>
+
+    <div class="project-contener-right">
+        @if (Model.graphicList.Count != 0)
+        {
+            @foreach (Graphic graphic in Model.graphicList)
+            {
+                <div class="project-name">
+                    <div class="info"><span class="info-span">@graphic.Name</span></div>
+                    <div class="project-logo">
+                        <a asp-action="GraphicView" asp-route-Id="@graphic.Id"><img src="~/Images/@graphic.MainPictureUrl"/></a>
+                    </div>
+                </div>
+            }
+        }else
+            {
+                <p class="empty-products">Brak projektów graficznych pasujących do podanych kryteriów wyszukiwania</p>
+            }
+       </div>    
+</div>
+
+<script>
+    $( document ).ready(function() {
+        let keyStorage = localStorage.getItem('key');
+        let categoriesStorage = JSON.parse(localStorage.getItem('categories'));
+        let collectionsStorage = JSON.parse(localStorage.getItem('collections'));
+
+        document.getElementById("search-input").value = keyStorage;
+        for(let i = 0; i < categoriesStorage.length; i++)  
+        {  
+            document.getElementById('category+'+categoriesStorage[i]).checked = "checked";
+        }  
+        for(let i = 0; i < collectionsStorage.length; i++)  
+        {  
+            document.getElementById('collection+'+collectionsStorage[i]).checked = "checked";
+        } 
+        localStorage.clear();
+    });
+
+
+var input = document.getElementById("search-input");
+
+input.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    let key = document.getElementById('search-input').value;
+    if(key.length < 3){
+        return false;
+    }
+        localStorage.clear();
+        localStorage.setItem('key', key);
+        location.href = '/Graphic/Search?key='+key;
+  }
+});
+</script>

@@ -1,0 +1,29 @@
+﻿@model GraphicsForYouShopApp.Models.Collection;
+
+@{
+    ViewData["Title"] = "Nowa kolekcja";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="projects-container">
+    <h1 class="new-project">Dodaj nową kolekcję</h1>
+    <form method="post" asp-action="CreateCollection" class="register-form" enctype = "multipart/form-data">
+        <div class="form-add">
+            <label asp-for="Name" class="form-label"></label>
+            <input type="text" asp-for="Name" autocomplete="off" class="form-input" />
+            <span asp-validation-for="Name"></span>
+        </div>
+
+        <div class="form-add">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" autocomplete="off" class="form-input">
+            </textarea>
+            <span asp-validation-for="Description"></span>
+        </div>
+
+        <div style="width: 100%; text-align: center;">
+            <input type="submit" value="DODAJ" class="register-button"/>
+        </div>
+    </form>
+</div>
+

@@ -1,0 +1,209 @@
+﻿@using GraphicsForYouShopApp.Models
+@model GraphicsForYouShopApp.Models.ShopViewModel
+
+@{
+    ViewData["Title"] = "Podsumwoanie zamówienia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal price = 0;
+    int prod = 0;
+}
+@if(Model != null){
+    if(Model.GraphicsInCart != null && Model.GraphicsInCart.Count > 0)
+    {
+<div class="container-checkout-all">
+
+    <div class="checkout-contener">
+        <p style="font-size: 24px; margin-bottom: 2em">PODSUMOWANIE ZAMÓWIENIA</p>
+       
+        <p class="order-details-list"><span>Dane kupującego</span></p>
+        <div class="client-data">
+            <p>Imię: @Model.User.Name</p>
+            <p>Nazwisko: @Model.User.Surname</p>
+            @if(Model.User.Company != null){
+            <p>Nazwa firmy: @Model.User.Company</p>
+            }
+            @if(Model.User.NIP != null){
+            <p>NIP: @Model.User.NIP</p>
+            }
+            <p>Adres: @Model.User.Street @Model.User.BuildingNumber, @Model.User.ZIPCode @Model.User.City</p>
+            <p>E-mail: @Model.User.Email</p>
+            <p>Numer telefonu: @Model.User.PhoneNumber</p>
+            <button type="button" onclick="changeData()" class="button-predict">Zmień dane</button>
+        </div>
+        <p class="order-details-list"><span>Zamówione projekty</span></p>
+             <div class="checkout-projects">
+
+                    <div class="checkout-photo"></div>
+                    <div class="checkout-name">
+                    </div>
+                    <div class="checkout-price">
+                    </div>
+                           
+                    <div class="checkout-delete">
+                        Cena
+                    </div>
+              
+                </div>
+
+                 <hr style="width: 100%; margin-left: auto; margin-right: auto;margin-top: 1em; margin-bottom: 1em"/>
+            @foreach (Graphic product in Model.GraphicsInCart)
+            {
+                <div class="checkout-projects">
+                    <div class="checkout-photo">
+                        <img src="~/Images/@product.MainPictureUrl"/>
+                    </div>
+                    <div class="checkout-name">
+                        <a asp-action="GraphicView" asp-controller="Graphic" asp-route-Id="@product.Id">
+                        @product.Name
+                        </a>
+                    </div>
+                    <div class="checkout-price">
+                    </div>
+                           
+                    <div class="checkout-delete">
+                         @if(@product.Price == @product.PromotionPrice){
+                                <p>@product.Price zł</p>
+                            }
+                            else{
+                               
+                                <p style="text-decoration: line-through">@product.Price zł</p>
+                                <p>@product.PromotionPrice zł</p>
+                            }
+                    </div>
+              
+                </div>
+                    
+                <div class="order-item-form">
+                    @if (product.CategoryId != 6)
+                            {
+                    <p style="width: 100%; text-align:center;">Formularz do projektu</p>
+                    <form class="contact-form contact-form @prod">
+                                <input type="hidden" step="0.01" name="Price" value = '@product.PromotionPrice'/>
+                                <input type="hidden" name="GraphicId" value='@product.Id'/>
+                                @if(product.CategoryId != 4){
+                                    <div class="form-add-summary">
+                                        <label class="form-label">Dane kontaktowe (imię i nazwisko, nazwa firmy, numer telefonu, adres, e-mail, adres www, linki społecznościowe i inne)</label>
+                                        <textarea name="Contact" autocomplete="off" class="form-input">
+                                        </textarea>
+                                    </div>
+                                }
+
+                                @if (product.CategoryId != 1 && product.CategoryId != 5)
+                                {
+
+                                    <div class="form-add-summary">
+                                        @if (product.CategoryId == 4)
+                                        {
+                                            <label class="form-label">Usługa - Cena</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="form-label">Treść</label>
+                                        }
+                                        <textarea name="Description" autocomplete="off" class="form-input">
+                                        </textarea>
+                                    </div>
+
+                                    <div class="form-add-summary">
+                                        <label class="form-label">Format</label>
+                                        <select name="Format" class="form-input">
+                                            <option value="0" selected="selected">Wybierz format</option>
+                                            <option value="A5">A5</option>
+                                            <option value="A6">A6</option>
+                                            <option value="A4">A4</option>
+                                        </select>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <input type="hidden" name="Description"/>
+                                    <input type="hidden" name="Format"/>
+                                }
+
+
+
+                    </form>
+                     }
+                            else
+                            {
+                               <p style="width: 100%; text-align:center;">Aby omówić szczegóły projektu Twojego logo, skontaktuj się z nami przez komunikator.</p>
+                            }
+
+                    </div>
+                    price = price + @product.PromotionPrice;
+                    prod = prod + 1;
+                    <hr style="width: 100%; margin-left: auto; margin-right: auto;margin-top: 1em; margin-bottom: 1em"/>
+                }
+
+            <div class="predict-date">
+                <div class="predict-left">
+                    <p>Przewidywany termin realizacji - <span style="font-weight: 700">1 tydzień</span></p>
+                    <p>Sposób płatności - <span style="font-weight: 700">Przelew tradycyjny</span></p>
+                </div>
+                <div class="predict-right">
+                    <div style="width: 100%; display: flex; flex-direction: row; ">
+                        <span style="width: 50%">Do zapłaty:</span>
+                        <span style="width: 50%; text-align: right;">@price zł</span>
+                    </div>
+                    <div class="button-predict">
+                        <button id="placeOrderBtn" class="but-pre" type="submit">Zakończ zakupy</button>
+                     </div>
+                </div>
+            </div>
+       
+       
+        </div>
+         </div>
+    }
+    else
+    {
+        <div>
+            Brak produktów w koszyku
+        </div>
+    }
+}
+
+<script>
+
+    function changeData(){
+        window.location.href = '@Url.Action("Profile", "Account", new { ifCheckout = "true"})';
+    }
+    $("#placeOrderBtn").click(function (){
+
+        const ile = document.getElementsByClassName('contact-form').length
+        let tabb = [];
+        for (let i = 0; i < ile; i++) {
+          let json = $('.'+i)
+            .serializeArray()
+            .reduce(function (json, { name, value }) {
+              json[name] = value;
+              return json;
+            }, {});
+
+        
+            tabb.push(json);
+
+        }
+
+        $.ajax({
+            url: '@Url.Action("PlaceOrder","Order")',
+            data: {
+                orderr: JSON.stringify(tabb)
+            }
+
+        }).done(function (response){  
+           
+                window.location.reload();
+                window.location.href = '@Url.Action("FinishOrder", "Order")?orderId='+response;
+                $.cookie('GraphicsInCart','', {path: '/'});
+            
+
+        })
+      
+    });
+
+   
+
+
+       
+</script>

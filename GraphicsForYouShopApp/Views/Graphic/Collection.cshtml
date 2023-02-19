@@ -1,0 +1,29 @@
+﻿@model GraphicsForYouShopApp.Models.Collection
+
+@{
+    ViewData["Title"] = "Edytuj kolekcję";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="projects-container">
+    <h1 class="new-project">Edytuj kolekcję</h1>
+    @using (Html.BeginForm("EditCollection", "Graphic", FormMethod.Post, new { encType = "multipart/form-data" }))
+    {
+        <input asp-for="Id" type="hidden"/>
+        <div class="form-add">
+            <label asp-for="Name" class="form-label"></label>
+            <input type="text" asp-for="Name" autocomplete="off" class="form-input"/>
+        </div>
+        <span asp-validation-for="Name"></span>
+        <div class="form-add">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" autocomplete="off" class="form-input">
+            </textarea>
+        </div>
+        <span asp-validation-for="Description"></span>   
+        <div style="width: 100%; text-align: center;">
+            <input type="submit" value="EDYTUJ" class="register-button"/>
+        </div>
+    }
+</div>
+

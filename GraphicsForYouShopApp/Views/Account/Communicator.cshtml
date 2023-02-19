@@ -1,0 +1,256 @@
+﻿@using GraphicsForYouShopApp.Models;
+@model dynamic;
+
+@{
+    ViewData["Title"] = "Komunikator";
+    if(Model.senderId == 1)
+        Layout = null;
+    else
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    int count = 0;
+}
+
+  <div id="add-new-class">
+<div class="second-messages-contener" id="second-messages-contener" style="overflow-y:scroll; padding: 8px;
+overflow-x:hidden; height:350px; border: 1px solid black; border-radius: 5px; background-color: white;">
+@foreach (Message message in Model.messagesList)
+{   if(message.SenderId == @Model.senderId)
+    {
+        if(message.MessageText == null){
+            <div class="sender-message"><p class="sender-message-file" onclick="GetFile(@message.Id)">@message.FileName</p></div>
+        }
+        else{
+            <div class="sender-message"><p class="sender-message-text">@message.MessageText</p></div>
+        } 
+    }
+    else
+    {
+        if(message.Read == true){
+            if(message.MessageText == null){
+                <div class="receiver-message"><p class="receiver-message-file" onclick="GetFile(@message.Id)">@message.FileName</p></div>
+            }
+            else{
+                <div class="receiver-message"><p class="receiver-message-text">@message.MessageText</p></div>
+            }
+         
+        }
+        else{
+            
+                count = count + 1;
+            
+        }
+    }
+}
+@if(count > 0){
+    <p class="second-order-details-list" id="new-messages"><span>Nowe wiadomości</span></p>
+    @foreach (Message message in Model.messagesList)
+{   if(message.ReceiverId == @Model.senderId && message.Read == false)
+    {
+                    if (message.MessageText != null)
+                    {
+                        <div class="receiver-message"><p class="receiver-message-text">@message.MessageText</p></div>
+                    }
+                    else
+                    {
+                        <div class="receiver-message"><p class="receiver-message-file" onclick="GetFile(@message.Id)">@message.FileName</p></div>
+                    }
+                }
+}
+}
+</div>
+
+ <div id="messages-buttons" class="messages-buttons">
+
+            <form enctype="multipart/form-data" method="post" onsubmit="return func1()" id="ajaxUploadForm" novalidate="novalidate">
+                    <input type="hidden" name="ReceiverId" value='@Model.receiverId' />
+                    <input type="hidden" name="SenderId" value='@Model.senderId' />
+   
+                 <textarea class="message-textarea"  id="messageInput" placeholder="Napisz wiadomość..." name="MessageText"></textarea>
+               
+
+              <label class="second-message-button">
+                    <input type="file" id="fileInput"  class="file-new" name="Files" multiple="multiple" onchange="getFiless()"/>
+                    Dołącz pliki
+                    
+                </label>
+                <span id="fileName" class="span-file-name"></span>
+                 <input class="message-button" type="submit"  id="sendToUser" value="Wyślij" />
+               
+ 
+   
+ 
+</form>
+
+ 
+     </div>
+     </div>
+
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script>
+
+function getFiless() {
+                data = new Array();
+                let fileName = document.getElementById('fileInput');
+                if(fileName.files.length > 1){
+                    document.getElementById('fileName').innerHTML = 'Dodano ' + fileName.files.length + ' pliki';
+                }
+                else{
+                    var file = fileName.files[0];
+                    document.getElementById('fileName').innerHTML = file.name;
+                }
+            }
+
+
+var connection = new signalR.HubConnectionBuilder().withUrl("http://localhost:65262/CommunicatorHub",
+{ skipNegotiation: true,
+  transport: signalR.HttpTransportType.WebSockets
+}
+).build();
+
+
+connection.on("ReceiveMessage", function (userId, senderId, message, fileName, fileId) {
+    UnreadMessages();
+    if(message != null){
+        var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        var encodedMsg = msg;
+    }
+    if(userId == @Model.receiverId && senderId == @Model.senderId)
+    {
+        
+        if(message != null){
+            var div = document.createElement("div");
+            div.className = "sender-message";
+            var p = document.createElement("p");
+            p.className = "sender-message-text";
+            p.textContent = encodedMsg;
+            div.appendChild(p);
+        }
+        else{
+            var div = document.createElement("div");
+            div.className = "sender-message";
+            var p = document.createElement("p");
+            p.className = "sender-message-file";
+            p.textContent = fileName;
+            div.appendChild(p);
+            p.onclick = function () 
+                {
+                    location.href = '@Url.Action("DownloadMessageFile", "Order")?id='+fileId;
+                };
+        }
+
+        
+       
+    }
+    else if(userId == @Model.senderId && senderId == @Model.receiverId)
+    {
+
+        var porder = document.createElement("p");
+        porder.className = "second-order-details-list";
+        porder.setAttribute('id','new-messages');
+        var sp = document.createElement("span");
+        sp.textContent = "Nowe wiadomości";
+        porder.appendChild(sp);
+        document.getElementById("second-messages-contener").appendChild(porder);
+        AddNewMessageInfo();
+
+        if(message != null){
+            var div = document.createElement("div");
+            div.className = "receiver-message";
+            var p = document.createElement("p");
+            p.className = "receiver-message-text";
+            p.textContent = encodedMsg;
+            div.appendChild(p);
+        }
+        else{
+            var div = document.createElement("div");
+            div.className = "receiver-message";
+            var p = document.createElement("p");
+            p.className = "receiver-message-file";
+            p.textContent = fileName;
+            div.appendChild(p);
+            p.onclick = function () 
+                {
+                    location.href = '@Url.Action("DownloadMessageFile", "Order")?id='+fileId;
+                };
+        }
+        
+
+       
+    }
+    document.getElementById("second-messages-contener").appendChild(div);
+    $('#second-messages-contener').scrollTop($('#second-messages-contener')[0].scrollHeight);
+});
+
+connection.start().then(function () {
+    connection.invoke("OnConnected", @Model.senderId).then(function (id) {
+    });
+    connection.invoke("OnDisconnected", @Model.senderId).catch(function (err) {
+    });
+    connection.invoke("OnConnected", @Model.senderId).then(function (id) {
+    });
+   $('#second-messages-contener').scrollTop($('#second-messages-contener')[0].scrollHeight);
+}).catch(function (err) {
+    return console.error(err.toString());
+});
+
+ $(document).ready(function(){
+            if(@Model.senderId != 1){
+                document.getElementById("second-messages-contener").classList.add("user-container-messages");
+                document.getElementById("add-new-class").classList.add("user-container-messages-all");
+                document.getElementById("messages-buttons").classList.add("user-container-messages-buttons");
+            }
+            $('#project-contener-right').scrollTop($('#project-contener-right')[0].scrollHeight);
+        });
+
+function AddNewMessageInfo(){
+    setTimeout(function(){ 
+        let element = document.getElementById("new-messages");
+        if(typeof(element) != 'undefined' && element != null){
+            element.classList.add("new-messages");
+            $.ajax({
+            url: '@Url.Action("ChangeMessageReading","Account")'
+            });
+            document.getElementById('unread-messages').style.display = "none";
+        }
+
+    }, 10000);
+}
+
+$(document).ready(function () {
+    AddNewMessageInfo();
+});
+
+</script>
+
+<script>
+function func1 () {
+  var form = document.getElementById("ajaxUploadForm");
+  var data = new FormData(form);
+  fetch("http://localhost:65262/api/Communicator/SendMessageFiles", {
+    method: "post",
+    body: data
+  });
+  document.getElementById('messageInput').value = '';
+
+  const dt = new DataTransfer()
+  const input = document.getElementById('fileInput')
+  const { files } = input
+  
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
+      dt.items.add(file)
+  }
+  
+  input.files = dt.files
+  document.getElementById('fileName').innerHTML = "";
+  return false;
+}
+
+function GetFile(fileId) 
+                {
+                    location.href = '@Url.Action("DownloadMessageFile", "Order")?id='+fileId;
+                    
+                };
+                
+</script>

@@ -1,0 +1,17 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+    Layout = "~/Views/Shared/_LayoutRegisterLogin.cshtml";
+}
+
+<div class="error_container">
+<h1 class="text-danger">Błąd strony.</h1>
+<h2 class="text-danger">Podczas przetwarzania żądania wystąpił błąd.</h2>
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+    </p>
+}
+</div>

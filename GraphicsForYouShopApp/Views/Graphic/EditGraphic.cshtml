@@ -1,0 +1,164 @@
+﻿@using GraphicsForYouShopApp.Data.Enums
+@model GraphicsForYouShopApp.Models.GraphicViewModel
+
+@{
+    ViewData["Title"] = "Dodaj nową grafikę";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="projects-container">
+    <h1 class="new-project">Edytuj projekt graficzny</h1>
+    @using (Html.BeginForm("Edit", "Graphic", FormMethod.Post, new { encType = "multipart/form-data" }))
+    {
+        <input asp-for="Id" type="hidden"/>
+
+        <div class="form-add">
+            <label asp-for="Name" class="form-label"></label>
+            <input type="text" asp-for="Name" autocomplete="off" class="form-input"/>
+        </div>
+
+        <span asp-validation-for="Name"></span>
+        <div class="form-add">
+            <label asp-for="Description" class="form-label"></label>
+            <textarea asp-for="Description" autocomplete="off" class="form-input">
+            </textarea>
+        </div>
+        <span asp-validation-for="Description"></span>
+
+        <div class="form-add">
+            <label asp-for="Price" class="form-label"></label>
+            <input type="float" step="0.01" asp-for="Price" class="form-price"/> 
+            <span style="margin-left: 0.4em; font-size: 16px;">zł</span>
+        </div>
+        <span asp-validation-for="Price"></span>
+
+        <div class="form-add">
+            <label asp-for="Category" class="form-label"></label>
+            @Html.DropDownListFor(model => model.CategoryId, new SelectList(ViewBag.categoryList, "Id", "Name"), new { @class="select-list" })
+        </div>
+        <span asp-validation-for="CategoryId"></span>
+
+        <div class="form-add">
+             <label asp-for="Collection" class="form-label"></label>
+            @Html.DropDownListFor(model => model.CollectionId, new SelectList(ViewBag.collectionList, "Id", "Name"), new { @class="select-list" })
+        </div>
+        <span asp-validation-for="Collection"></span>
+
+        <div class="form-add">
+            <label asp-for="Availability" class="form-label"></label>
+             <select asp-for="Availability" class="select-list" asp-items="Html.GetEnumSelectList<GraphicAvailability>()"></select>
+        </div>
+
+        <hr style="width: 70%; margin-right: auto; margin-left: auto;"/>
+        <div class="form-add">
+            <label asp-for="MainPicture" class="form-label"></label>
+                <div class="graphic-pictures">
+                    <div class="item" id="new-picture">
+                        <img src="~/Images/@Model.MainPictureUrl"/>  
+                    </div>
+               </div>
+             @Html.TextBoxFor(m => m.MainPicture, new { type = "file", name = "MainPicture", id="main-image-upload", @class="form-label"})
+        </div>
+
+        <hr style="width: 70%; margin-right: auto; margin-left: auto;"/>
+        <div class="form-add" id="containet-picturesss">
+            <label asp-for="Pictures" class="form-label"></label>
+                <div class="graphic-pictures" id="new-pictures">
+                     @for (var i = 0; i < Model.PicturesList.Count; i++)
+                     {
+                        <div class="item" id="@Model.PicturesList[i].Name">
+                            <img src="~/Images/@Model.PicturesList[i].Name"/>
+                            <i class="fa-solid fa-square-minus fa-3x" onclick="deletePictureDataBase('@Model.PicturesList[i].Name','@Model.PicturesList[i].Id')"></i>
+                        </div>  
+                     }
+                </div>
+                @Html.TextBoxFor(m => m.Pictures, new { type = "file", name = "Pictures", id="images-upload", multiple = "multiple", @class="form-label"})
+                <div id="new-images"></div>
+        </div>
+            
+        <div style="width: 100%; text-align: center;">
+            <input type="submit" value="EDYTUJ" class="register-button"/>
+        </div>
+
+  
+}
+</div>
+
+<script>
+
+let dataTranTemp = new DataTransfer();
+let dataTran = new DataTransfer();
+let imagesFile = document.querySelector('#images-upload');
+let imagesContainer = document.querySelector('#new-pictures');
+imagesFile.addEventListener('change', updateImages);
+function updateImages() 
+{
+    let Files = imagesFile.files;
+    for (let file of Files) 
+    {
+        dataTranTemp.items.add(new File([], file.name));
+        let div = document.createElement('div');
+        div.className = "item";
+        let i = document.createElement('i');
+        i.className = "fa-solid fa-square-minus fa-3x";
+        let image = document.createElement('img');
+        image.src = URL.createObjectURL(file);
+        div.id = image.src;
+        i.onclick = function () 
+        {
+            div.parentNode.removeChild(div);
+            dataTran = new DataTransfer();
+            for (let data of input.files)
+            {
+                if (data !== file) 
+                {
+                    dataTran.items.add(data)
+                    if(dataTran.files.length != 0)
+                    {
+                        input.files = dataTran.files;
+                    }
+                }
+            }
+        };
+        div.appendChild(image);
+        div.appendChild(i);
+        imagesContainer.appendChild(div);
+    }
+}
+
+      function deletePictureDataBase(pictureId, id){
+          $.ajax({
+            url: '@Url.Action("Delete", "Graphic")',
+            data: {
+                id: id
+            }
+
+        });    
+            var picture = document.getElementById(pictureId);
+            picture.parentNode.removeChild(picture);
+      }
+
+      function removePicture(id){
+           var picture = document.getElementById(id);
+            picture.parentNode.removeChild(picture);
+      }
+
+
+    let imageFile = document.querySelector('#main-image-upload');
+    let imageContainer = document.querySelector('#new-picture');
+    imageFile.addEventListener('change', updateImage);
+
+    function updateImage(){
+        while(imageContainer.firstChild) 
+        {
+            imageContainer.removeChild(imageContainer.firstChild);
+        }
+            
+        let Files = imageFile.files;
+        for (let file of Files) {
+            let image = document.createElement('img');
+            image.src = URL.createObjectURL(file);
+            imageContainer.appendChild(image);
+        }
+    }
+</script>

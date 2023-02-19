@@ -1,0 +1,261 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Gill Sans MT';
+}
+
+body {
+    background-color: #004973;
+}
+
+.fa-angle-down {
+    animation: mover 1s infinite alternate;
+}
+
+.container-signupin {
+    display: flex;
+    background-color: #004973;
+}
+
+.side {
+    display: none;
+}
+
+.main {
+    min-height: 100vh;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-form {
+    padding: 1em;
+    width: 90%;
+    display: flex;
+    background-color: whitesmoke;
+    border-radius: 5px;
+    min-height: 60%;
+    flex-direction: column;
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.title {
+    font-size: 3em;
+    width: 100%;
+    font-family: 'Agency FB';
+    font-weight: bold;
+}
+
+.separator {
+    width: 50%;
+    height: 0.1vh;
+    background-color: #004973;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-input {
+    width: 100%;
+    border: 1px solid #d6d6d6;
+    border-radius: 5px;
+    outline: none;
+    padding: 0.5rem;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+.error {
+    margin-top: 0.5em;
+    color: red;
+    font-weight: bold;
+}
+
+.success {
+    margin-top: 0.5em;
+    color: green;
+    font-weight: bold;
+}
+
+
+.form-input:focus {
+    border: 1.5px solid #004973;
+}
+
+.form-label {
+    padding: 0.1em 0;
+    cursor: text;
+    width: 90%;
+}
+
+.error_container {
+    background-color: whitesmoke;
+    margin: 0;
+    padding-top: 20vh;
+    width: 100%;
+    min-height: 100vh;
+}
+
+span {
+    color: red;
+    width: 100%;
+    display: block;
+}
+
+.register-button {
+    font-family: 'Montserrat', sans-serif;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: white;
+    padding: 0.8rem;
+    width: 60%;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin-top: 1em;
+    background-image: linear-gradient(to right, #004973, #15a0e1);
+}
+
+.forgot-password {
+    width: 100%;
+    display: block;
+    text-decoration: none;
+    color: black;
+    margin-top: 1em;
+}
+
+.register-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-items: center;
+}
+
+@media (min-width: 1200px) {
+
+    .form-input {
+        border: 1px solid #d6d6d6;
+        border-radius: 5px;
+        outline: none;
+        padding: 0.5rem;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .side {
+        display: flex;
+        width: 35%;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .form-control {
+        align-items: center;
+        justify-content: center;
+        text-align: left;
+        margin-top: 1em;
+        width: 49%;
+        margin-left: auto;
+        margin-right: auto;
+        justify-items: left;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .main {
+        width: 65%;
+        position: relative;
+    }
+
+    .container-form {
+        width: 70%;
+        left: 0;
+        background-color: whitesmoke;
+        position: absolute;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        justify-items: center;
+    }
+
+    .form-control-two {
+        background-color: blue;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        text-align: left;
+        margin-top: 1.5em;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .container-more {
+        right: 0;
+        width: 50%;
+        min-height: 40vh;
+        position: absolute;
+        text-align: center;
+        padding: 1em;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        color: white;
+    }
+
+    .register-button {
+        width: 35%;
+    }
+
+    .container-more h3 {
+        font-family: 'Montserrat', sans-serif;
+        padding: 1em;
+        font-size: 1.5em;
+    }
+
+    .container-more a {
+        font-family: 'Montserrat', sans-serif;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 0.9em;
+        color: white;
+        padding: 0.8rem;
+        min-width: 40%;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: bold;
+        margin-top: 1.5em;
+        background-color: whitesmoke;
+        color: black;
+    }
+
+    .inputs {
+        width: 90%;
+        flex-direction: row;
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: space-around;
+        justify-items: center;
+        align-items: center;
+    }
+}
+
+@keyframes mover {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-20px);
+    }
+}

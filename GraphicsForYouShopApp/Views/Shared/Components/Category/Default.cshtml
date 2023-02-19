@@ -1,0 +1,18 @@
+﻿@using GraphicsForYouShopApp.Models
+@model List<Category>
+
+<ul>
+    @foreach (Category cat in Model){
+        <li><a class="navbar-link" href="#" onclick='ChooseCategory(@cat.Id); return false'>@cat.Name</a></li> 
+    }
+</ul>
+
+<script>
+    var mainCategories = []
+    function ChooseCategory(id){
+        mainCategories.push(id);
+        localStorage.clear();
+        localStorage.setItem('categories', JSON.stringify(mainCategories));
+        location.href = '/Graphic/Search?categories='+JSON.stringify(mainCategories);
+    }
+</script>

@@ -1,0 +1,92 @@
+﻿@using GraphicsForYouShopApp.Models
+@model GraphicsForYouShopApp.Models.ShopViewModel
+
+@{
+    ViewData["Title"] = "Koszyk";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal price = 0;
+}
+
+<div class="container-checkout-all">
+
+    <div class="checkout-contener">
+        @if(Model != null){
+    if(Model.GraphicsInCart != null && Model.GraphicsInCart.Count > 0)
+    {
+        <p style="font-size: 20px; margin-bottom: 2em">TWÓJ KOSZYK</p>
+       
+       
+
+             <div class="checkout-projects">
+                    <div class="checkout-photo"></div>
+                    <div class="checkout-name">
+                    </div>
+                    <div class="checkout-price">
+                         Cena
+                    </div>
+                           
+                    <div class="checkout-delete">
+                        Usuń
+                    </div>
+              
+                </div>
+
+                 <hr style="width: 100%; margin-left: auto; margin-right: auto;margin-top: 1em; margin-bottom: 1em"/>
+            @foreach (Graphic product in Model.GraphicsInCart)
+            {
+                <div class="checkout-projects">
+                    <div class="checkout-photo">
+                        <img src="~/Images/@product.MainPictureUrl"/>
+                    </div>
+                    <div class="checkout-name">
+                        <a asp-action="GraphicView" asp-controller="Graphic" asp-route-Id="@product.Id">
+                        @product.Name
+                        </a>
+                    </div>
+                    <div class="checkout-price">
+                         @if(@product.Price == @product.PromotionPrice){
+                                <p>@product.Price zł</p>
+                            }
+                            else{
+                               
+                                <p style="text-decoration: line-through">@product.Price zł</p>
+                                <p>@product.PromotionPrice zł</p>
+                            }
+                    </div>
+                           
+                    <div class="checkout-delete">
+                        <i class="fa-solid fa-xmark" onClick="deleteProject(@product.Id)"></i>
+                    </div>
+                </div>
+                price = price + @product.PromotionPrice; 
+            }
+
+            <div class="predict-date">
+                <div class="predict-left">
+                </div>
+                <div class="predict-right">
+                    <div style="width: 100%; display: flex; flex-direction: row; ">
+                        <span style="width: 50%">Do zapłaty:</span>
+                        <span style="width: 50%; text-align: right;">@price zł</span>
+                    </div>
+                    <div class="button-predict" style="margin-top: 1em;">
+                        <a asp-action="Summary" class="but-pre" asp-controller="Order">
+                            Przejdź dalej
+                            </a>
+                     </div>
+                </div>
+            </div>
+            }
+            else
+            {
+                <div class="empty-cart">
+                    <p style="font-size: 35px; width: 100%">KOSZYK JEST PUSTY</p>
+                       
+                    <a asp-action="Index" asp-controller="Home" class="button-add-order">Rozpocznij zakupy</a>
+                      
+                </div>
+            }
+            }
+       
+        </div>
+         </div>

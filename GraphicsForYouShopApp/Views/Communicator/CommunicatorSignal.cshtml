@@ -1,0 +1,47 @@
+﻿@model List<GraphicsForYouShopApp.Models.CountOrderViewModel>
+
+@{
+    ViewData["Title"] = "Komunikator";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-messages-all">
+    <div class="messages-contener">
+        <div class="messages-contener-left">
+            <div style="overflow-y:scroll; overflow-x:hidden; height:480px">
+                @foreach (var item in Model){
+                    <div class="users-to-message" id="user+@item.Id">
+                        <span onclick="ViewMessage('@item.Id')">@item.Name 
+                            @if(item.MessagesCount > 0){
+                                <i class="fa-solid fa-envelope fa-xl" id="unread-messages">
+                                        <span class="right-dot"><span class="ooo" id="unreadMessagesCount">@item.MessagesCount</span></span>
+                                </i>
+                            }
+                            else{
+                                <i class="fa-solid fa-envelope fa-xl" id="unread-messages" style="display:none">
+                                    <span class="right-dot"><span class="ooo" id="unreadMessagesCount">@item.MessagesCount</span></span>
+                                </i>
+                            }
+                        </span> 
+                        <span class="order-count">Zamówienia w realizacji: @item.InProgressOrders</span>
+                        <span class="order-count">Zamówienia nieopłacone: @item.UnpaidOrders</span>
+                        <span class="order-count">Zamówienia zrealizowane: @item.RealisedOrders</span>
+                        <span class="order-count">Zamówienia anulowane: @item.CancelledOrders</span>
+                    </div>
+                }
+            </div>
+        </div>
+        
+        <div class="messages-contener-right">
+            <p class="choose-conversation" id="choose-conversation" style="display: block">Wybierz konwersację, aby ją przeczytać</p>
+            <div id="project-contener-right"></div>
+        </div>
+   
+    </div>
+</div>       
+
+<script>
+    $(document).ready(function(){
+        $('#project-contener-right').scrollTop($('#project-contener-right')[0].scrollHeight);
+    });
+</script>

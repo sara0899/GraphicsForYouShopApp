@@ -1,0 +1,119 @@
+﻿
+@using GraphicsForYouShopApp.Models;
+@model dynamic;
+
+@{
+    ViewData["Title"] = "Szczegóły zamówienia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+
+<div class="container-checkout-all">
+
+    <div class="checkout-contener">
+               <p style="font-size: 30px; margin-bottom: 2em">Szczegóły zamówienia nr @Model.order.Id</p>
+        <div class="predict-date">
+                <div class="predict-left">
+                    <p>Status zamówienia - <span style="font-weight: 700">@Model.order.OrderStatus</span></p>
+                    <p>Zamówienie z dnia - <span style="font-weight: 700">@Model.order.OrderDate</span></p>
+                </div>
+                <div class="predict-right">
+                    <div style="width: 100%; display: flex; flex-direction: row; ">
+                        <span style="width: 50%">Kwota:</span>
+                        <span style="width: 50%; text-align: right;">@Model.order.TotalAmount zł</span>
+                    </div>
+                   
+                </div>
+            </div>
+
+ 
+       
+        
+        <p class="order-details-list"><span>Zamówione projekty</span></p>
+             <div class="checkout-projects">
+
+                    <div class="checkout-photo"></div>
+                    <div class="checkout-name">
+                    </div>
+                    <div class="checkout-price">
+                      
+                    </div>
+                           
+                    <div class="checkout-delete">
+                        Cena
+                    </div>
+              
+                </div>
+
+                 <hr style="width: 100%; margin-left: auto; margin-right: auto;margin-top: 1em; margin-bottom: 1em"/>
+            @foreach (Graphic graphic in Model.orderItemsList)
+            {
+                <div class="checkout-projects">
+                    <div class="checkout-photo">
+                        <img src="~/Images/@graphic.MainPictureUrl"/>
+                    </div>
+                    <div class="checkout-name">
+                        <a asp-action="GraphicView" asp-controller="Graphic" asp-route-Id="@graphic.Id">
+                        @graphic.Name
+                        </a>
+                    </div>
+                    <div class="checkout-price">
+               
+                    </div>
+                           
+                    <div class="checkout-delete">
+          
+                         @graphic.PromotionPrice zł
+                    </div>
+              
+                </div>
+
+            }
+            
+            
+       <p class="order-details-list"><span>Dane zamawiającego</span></p>
+        <div class="client-data">
+            <p>Imię: @Model.user.Name
+            <p>Nazwisko: @Model.user.Surname</p>
+            @if(Model.user.Company != null){
+            <p>Nazwa firmy: @Model.user.Company</p>
+            }
+            @if(Model.user.NIP != null){
+            <p>NIP: @Model.user.NIP</p>
+            }
+            <p>Adres: @Model.user.Street @Model.user.BuildingNumber, @Model.user.ZIPCode @Model.user.City</p>
+            <p>E-mail: @Model.user.Email</p>
+            <p>Numer telefonu: @Model.user.PhoneNumber</p>
+        </div>
+
+        <p class="order-details-list"><span>Zarządzanie plikami</span></p>
+        <div class="client-data">
+            <table>
+            @if(Model.orderFiles.Count != 0){
+                @foreach (OrderFile file in Model.orderFiles)
+                {
+                    
+                        <form asp-action="DownloadFile" method="post" asp-route-id="@file.Id">
+                           
+                            <tr>
+                                <td><p>@file.Name</p></td>
+                                <td><input type="submit" value="Pobierz" class="download-button"></td>
+                            </tr>
+                            
+                        </form>
+                }
+            }
+            else{
+                <p style="font-weight: 600">Brak plików do pobrania</p>
+            }
+            </table>
+
+           <button class="button-add-order" onclick="AddFiles(@Model.order.Id)">Dodaj pliki</button>
+
+        </div>
+
+
+       
+        </div>
+ </div>
+     

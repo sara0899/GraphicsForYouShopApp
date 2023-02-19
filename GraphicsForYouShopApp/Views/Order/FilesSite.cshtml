@@ -1,0 +1,29 @@
+﻿@model GraphicsForYouShopApp.Models.OrderFileViewModel;
+
+@{
+    ViewData["Title"] = "Dodaj pliki";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="projects-container">
+    <h1 class="new-project">Dodaj pliki z projektami do zamówienia</h1>
+   
+        <form method="post" asp-action="AddFilesToOrder" class="register-form" enctype = "multipart/form-data">
+        <input type="hidden" asp-for="OrderId"/>
+        <div class="form-add">
+            <label asp-for="Files" class="form-label"> </label>
+            <div class="graphic-pictures" id="new-pictures">
+                </div>
+                @Html.TextBoxFor(m => m.Files, new { type = "file", name = "Files", id="images-upload", multiple = "multiple", @class="form-label"})
+                <span asp-validation-for="Files"></span>
+                </div>
+            
+                <div style="width: 100%; text-align: center;">
+                <input type="submit" value="DODAJ" class="register-button"/>
+                </div>
+</form>
+  
+   
+</div>
+

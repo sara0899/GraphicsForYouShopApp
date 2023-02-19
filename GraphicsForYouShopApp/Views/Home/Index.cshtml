@@ -1,0 +1,36 @@
+﻿@model List<Category>
+@{
+    ViewData["Title"] = "GraphicsForYou";
+}
+
+<div class="hero-image">
+    <div class="hero-text">
+        <h1>Indywidualne projekty<br /> grafik dla Ciebie</h1>
+        <h3>Tworzymy ulotki, wizytówki, loga i inne unikalne projekty, dzięki którym zdobędziesz potencjalnych klientów. Masz wpływ na cały proces tworzenia Twoich firmowych grafik.</h3>
+        <div class="search-container">
+            <input type="search" required class="search-input" autocomplete="off" id="key" minlenght="3" name="key" placeholder="Czego szukasz?">
+            <i class="fa-solid fa-magnifying-glass fa-2xl fa-main-page"></i>
+        </div>
+    </div>
+    <div class="down"><i class="fa-solid fa-angles-down fa-4x"></i></div>
+</div>
+
+<div class="steps-image">
+    <div class="steps-text">
+        <h1>Zapoznaj się ze sposobem realizacji zamówień, który opracowaliśmy w celu jak najlepszego dostosowywania grafik do Ciebie</h1>
+    </div>
+</div>
+
+<div class="categories-container">
+    <div class="categories" id="goDown">
+        @foreach (Category category in Model)
+        {
+            <div class="category-name">
+                <div class="logo">
+                    <a class="navbar-link" href="#" onclick='ChooseCategory(@category.Id); return false'><img src="~/Images/@category.Url"/></a>
+                </div>
+                <p class="categorynnn">@category.Name</p>
+            </div>
+         }
+    </div>
+</div>

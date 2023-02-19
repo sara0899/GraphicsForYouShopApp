@@ -1,0 +1,30 @@
+﻿@using GraphicsForYouShopApp.Models
+@model GraphicsForYouShopApp.Models.Order
+
+@{
+    ViewData["Title"] = "Finalizacja zamówienia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-checkout-all">
+
+    <div class="checkout-contener">
+       <p style="font-size: 24px; margin-bottom: 2em">Dziękujemy za złożenie zamówienia!</p>
+       <p style="font-size: 16px;">Aby zamówienie mogło zostać zrealizowane, prosimy o jego opłacenie poprzez tradycyjny transfer bankowy. W tytule przelewu
+           należy wpisać numer zamówienia.</p>
+
+        <p style="font-size: 16px;">Jeśli chcesz spersonalizować Twoje zamówione projekty i uczynić je wyjątkowymi, zachęcamy do uczestnictwa w konwersacji
+            z Naszym grafikiem komputerowym.
+             <a asp-action="Index" asp-controller="Controller" class="button-add-order">Komunikator</a>
+         </p>
+
+           <p style="font-size: 16px;margin-top: 30px; color: #004973;font-weight: 700;">Dane do przelewu bankowego:</p>
+          <div class="transfer" style="margin-top: 20px;">
+              
+              <p>Odbiorca: <span style="font-weight: 700;font-size: 22px;">GraphicsForYou</span></p>
+              <p>Numer konta: <span style="font-weight: 700;font-size: 22px;">49 1020 2892 2276 3005 0000 0000</span></p>
+              <p>Tytuł przelewu: <span style="font-weight: 700;font-size: 22px;">@Model.Id</span> </p>
+              <p>Kwota: <span style="font-weight: 700;font-size: 22px;">@Model.TotalAmount zł</span></p>
+          </div>       
+        </div>
+         </div>

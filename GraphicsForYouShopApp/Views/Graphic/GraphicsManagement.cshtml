@@ -1,0 +1,51 @@
+﻿@using GraphicsForYouShopApp.Data.Enums
+@using GraphicsForYouShopApp.Models
+@model IEnumerable<Graphic>
+
+@{
+    ViewData["Title"] = "Zarządzanie grafikami";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="container-checkout-all">
+    <div class="checkout-contener">
+        @if (Model != null)
+        {
+            <p style="font-size: 30px; margin-bottom: 2em">Projekty grafik dodane na sklep</p>
+
+            <div class="checkout-projects">
+                <div class="checkout-photo"></div>
+                <div class="checkout-name"></div>
+                <div class="checkout-price"></div>
+                <div class="checkout-delete">Edytuj</div>
+            </div>
+
+            <hr style="width: 100%; margin-left: auto; margin-right: auto;margin-top: 1em; margin-bottom: 1em"/>
+            @foreach (Graphic product in Model)
+            {
+                <input type="hidden" id=product+@product.Id>
+                <div class="checkout-projects">
+                    <div class="checkout-photo">
+                        <img src="~/Images/@product.MainPictureUrl"/>
+                    </div>
+                    <div class="checkout-name">
+                        <a asp-action="GraphicView" asp-controller="Graphic" asp-route-Id="@product.Id">
+                            @product.Name
+                        </a>
+                    </div>
+                    <div class="checkout-price"></div>
+                    <div class="checkout-delete">
+                         <a asp-action="EditGraphic" asp-controller="Graphic" asp-route-Id="@product.Id">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                    </div>
+                </div>
+            }
+        }
+
+        <div class="down-plus">
+            <i class="fa-sharp fa-solid fa-circle-plus fa-3x" onclick="addGraphic()"></i>
+        </div>
+    </div>
+</div>

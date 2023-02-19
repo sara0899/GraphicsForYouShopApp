@@ -1,0 +1,80 @@
+﻿@using GraphicsForYouShopApp.Models
+@model List<GraphicsForYouShopApp.Models.PromotionViewModel>
+
+@{
+    ViewData["Title"] = "Promocje";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container-checkout-all">
+
+    <div class="checkout-contener">
+        @if (Model != null)
+        {
+            <p style="font-size: 30px; margin-bottom: 2em">Dodane promocje</p>
+
+            <div class="checkout-projects">
+                <div class="checkout-photo"></div>
+                <div class="checkout-name">
+                </div>
+                <div class="promotion-description">
+                    
+                </div>
+                <div class="checkout-price">
+                </div>
+
+               
+
+            </div>
+
+            <hr style="width: 100%; margin-left: auto; margin-right: auto;margin-top: 1em; margin-bottom: 1em"/>
+            @foreach (PromotionViewModel promotion in Model)
+            {
+                <div class="checkout-projects">
+                    <div class="checkout-photo">
+                        <img src="~/Images/@promotion.MainPictureUrl"/>
+                    </div>
+                    <div class="checkout-name">
+                        <a asp-action="GraphicView" asp-controller="Graphic" asp-route-Id="@promotion.GraphicId">
+                            @promotion.GraphicName
+                        </a>
+                    </div>
+                    <div class="checkout-price">
+                        @if(@promotion.Price == @promotion.PromotionPrice){
+                            <span>@promotion.Price zł</span>
+                        }
+                        else{
+                            <span><span style="text-decoration: line-through">@promotion.Price</span> zł</span>
+                            <br />
+                            <p>@promotion.PromotionPrice zł</p>
+                        }
+                    </div>
+                </div>
+                 
+                     @foreach (Promotion promo in promotion.Promotions)
+            {
+                <div class="promotion-description">
+                    @if(promo.DateFrom <= DateTime.Now && promo.DateTo >= DateTime.Now)
+                    {
+                        <span style="color: #3cb043">Promocja trwa.</span>
+                    }
+                    else{
+                        <span style="color: #900009">Promocja nierozpoczęta.</span>
+                    }
+                    
+                    <span>&nbsp;@promo.Name trwa od @promo.DateFrom.ToShortDateString() do @promo.DateTo.ToShortDateString(). Obniżka o @promo.Percentage%.</span>
+                     </div>
+                }
+                   
+                <hr style="width: 100%; margin-left: auto; margin-right: auto;margin-top: 1em; margin-bottom: 1em"/>    
+            }
+            
+        }
+            <div class="down-plus">
+                <i class="fa-sharp fa-solid fa-circle-plus fa-3x" onclick="addPromotion()"></i>
+            </div>
+
+        </div>
+         
+    </div>

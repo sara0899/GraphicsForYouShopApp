@@ -1,0 +1,59 @@
+﻿@using GraphicsForYouShopApp.Models
+@model List<Order>
+
+@{
+    ViewData["Title"] = "Zamówienia użytkowników";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-checkout-all">
+
+    <div class="checkout-contener">
+
+       <p style="font-size: 24px; margin-bottom: 2em; width: 100%;">ZAMÓWIENIA</p>
+             <div class="user-orders">
+
+                    <div class="order-number">Nr zamówienia</div>
+                    <div class="order-number">Data zamówienia
+                    </div>
+                    <div class="order-status-cash">
+                         Kwota
+                    </div>
+                    <div class="order-status-cash">
+                         Status
+                    </div>
+                           
+                    <div class="order-details">
+                       Szczegóły
+                    </div>
+              
+                </div>
+
+                 <hr style="width: 100%; margin-left: auto; margin-right: auto;margin-top: 1em; margin-bottom: 1em"/>
+       
+       @foreach (Order order in Model)
+            {
+                <div class="user-orders">
+                    <div class="order-number">
+                        @order.Id
+                    </div>
+                    <div class="order-number">
+                        @order.OrderDate
+                    </div>
+                    <div class="order-status-cash">
+                         @order.TotalAmount zł
+                    </div>
+
+                    <div class="order-status-cash">
+                         @order.OrderStatus
+                    </div>
+                           
+                    <div class="order-details">
+                        <i style="font-family: 'Gill Sans MT'; font-weight: 500" class="fa-solid fa-plus" onclick="orderDetail('@order.Id')"> Zobacz</i>
+                    </div>
+              
+                </div>
+                <hr style="width: 100%; margin-left: auto; margin-right: auto;margin-top: 1em; margin-bottom: 1em"/>
+            }
+        </div>
+         </div>

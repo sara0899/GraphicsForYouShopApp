@@ -1,0 +1,228 @@
+﻿@using GraphicsForYouShopApp.Models;
+@model dynamic;
+
+@{
+    ViewData["Title"] = "Produkt";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal price = 0;
+}
+
+<div class="projects-container">
+    <div class="cart-product-container">
+        <div>
+    <div class="graphic-contener-left">
+
+        <div class="slider">
+            <div class="slider-graphics">
+                    @for (var i = 0; i < Model.product.PicturesList.Count; i++){
+                        @if (i == 0)
+                        {
+                            <div class="item active">
+                                <img src="~/Images/@Model.product.PicturesList[i].Name"/>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="item">
+                                <img src="~/Images/@Model.product.PicturesList[i].Name"/>
+                            </div>
+                        }
+    
+                    }
+                
+            </div>
+
+            <div class="left-graphic-in-slider"><i class="fa-solid fa-angle-left"></i></div>
+            <div class="right-graphic-in-slider"><i class="fa-solid fa-angle-right"></i></div>
+        </div>
+    
+    </div>
+
+    <div class="graphic-contener-right">
+    <form>
+            
+            <p class="product-name">@Model.product.Name</p>
+            @if(@Model.product.Price == @Model.product.PromotionPrice){
+                <p>@Model.product.Price zł</p>
+            }
+            else{
+                price = Decimal.ToInt32(100 - (@Model.product.PromotionPrice / @Model.product.Price)*100);
+                <p><span style="text-decoration: line-through">@Model.product.Price zł</span><span class="red-percent">-@price %</span></p>
+                <p>@Model.product.PromotionPrice zł</p>
+            }
+            
+            <input id="productId" type="hidden" value = "@Model.product.Id">
+            @if (!User.IsInRole("Designer")){
+                @if(Model.product.Availability == Model.enums[0]){
+                    <button type="button" class="product-added-to-cart" disabled>Projekt niedostępny</button>
+                }else{
+                    <button type="button" id="product-added-to-cart" class="product-added-to-cart" data-id="@Model.product.Id">Dodaj do koszyka</button>
+                }
+            }
+ 
+   </form>
+
+   <div class="personalize">
+       <span>Po dodaniu projektu do koszyka czeka na Ciebie krótki formularz do wypełnienia danymi, które chcesz zamieścić na grafice.
+       Natomiast jeśli chcesz spersonalizować zamówiony projekt graficzny, serdecznie zachęcamy do skorzystania z komunikatora, w którym przekażesz jakie zmiany
+       mają zostać wprowadzone na grafice - możliwa jest zmiana koloru, czcionki, dodania loga i inne, zależnie od Twoich
+       preferencji, postaramy się spełnić wszelkie wymagania.</span>
+   </div>
+
+   </div>
+   </div>
+   <div class="graphic-contener-description">
+       <p>@Model.product.Description</p>
+    </div>
+    </div>
+
+    <hr style="width: 90%; margin-right: auto; margin-left: auto;"/>
+    <div class="swiper">
+        <p class="collection-title">KOLEKCJA <span style="font-size: 28px">@Model.product.Collection.Name</span></p>
+       <p class="collection-description">@Model.product.Collection.Description</p>
+        <div class="swiper-wrapper">
+            @foreach(Graphic collect in Model.collection)
+            {
+                 
+                <div class="swiper-slide">
+                    <a asp-action="GraphicView" asp-controller="Graphic" asp-route-Id="@collect.Id">
+                                    <img src="~/Images/@collect.MainPictureUrl"/>
+                                     </a>
+                                    @collect.Name
+                                   
+                </div>
+                
+            }
+        </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+
+    </div>
+</div>
+
+<script>    
+
+    $( document ).ready(function() {
+    var exisitingCookieData = $.cookie('GraphicsInCart');
+    var idd = document.getElementById("productId").value;
+        if(exisitingCookieData != undefined && exisitingCookieData != "" && exisitingCookieData != null){
+            products = exisitingCookieData.split('-');
+            products.forEach(function(element) {
+                    if (element == idd) {
+                        document.getElementById("product-added-to-cart").disabled = true;
+                        document.getElementById("product-added-to-cart").innerHTML = "Dodano do koszyka";
+                    }
+        });
+            };
+});
+
+
+    var products;
+    $(".product-added-to-cart").click(function (){
+        var exisitingCookieData = $.cookie('GraphicsInCart');
+        if(exisitingCookieData != undefined && exisitingCookieData != "" && exisitingCookieData != null){
+            products = exisitingCookieData.split('-');
+        }else{
+            products = [];
+        }
+        var productID = $(".product-added-to-cart").attr('data-id');
+        var ile = 0;
+        products.forEach(function(element) {
+                    if (element == productID) {
+                        ile = ile + 1;
+                        $(".product-added-to-cart").disabled = true;
+                        $(".product-added-to-cart").html =" hej";
+                    }
+        
+                    });
+        if(ile == 0){
+            products.push(productID);
+        }
+        $.cookie('GraphicsInCart', products.join('-'), {path: '/'});
+        location.reload();
+    });
+
+</script>
+
+<script>
+    var slides = document.querySelector('.slider-graphics').children;
+    var nextGraphicInSlider = document.querySelector(".right-graphic-in-slider");
+    var previousGraphicInSlider = document.querySelector(".left-graphic-in-slider");
+    var totalSlides = slides.length;
+    var num = 0;
+
+    nextGraphicInSlider.onclick = function () { nextSlide("0"); }
+
+    previousGraphicInSlider.onclick = function () { nextSlide("1"); }
+
+    function nextSlide(direction){
+        if(direction=="0"){
+            num++;
+            if(num == totalSlides)
+            {
+                num = 0;
+            }
+        }
+
+        if(direction=="1"){
+            
+            if(num == 0)
+            {
+                num = totalSlides;
+            }
+            num--;
+        }
+
+        for(i = 0; i < slides.length; i++ ){
+            slides[i].classList.remove("active");
+        }
+
+        slides[num].classList.add("active");
+    }
+
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+
+<script>
+
+if ($(window).width() < 960) {
+   const swiper = new Swiper('.swiper', {
+
+  direction: 'horizontal',
+  loop: true,
+  slidesPerView: 1,
+  spaceBetween: 30,
+  slidesPersGroup: 1,
+  loopFillGroupWithBlank: true,
+  loop: true,
+
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+
+});
+}
+else {
+  const swiper = new Swiper('.swiper', {
+
+  direction: 'horizontal',
+  loop: true,
+  slidesPerView: 3,
+  spaceBetween: 30,
+  slidesPersGroup: 3,
+  loopFillGroupWithBlank: true,
+  loop: true,
+
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+
+});
+
+}
+</script>

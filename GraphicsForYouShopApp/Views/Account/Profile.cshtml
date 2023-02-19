@@ -1,0 +1,100 @@
+﻿@model GraphicsForYouShopApp.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Profil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="projects-container">
+    <h1 class="new-project">Profil użytkownika</h1>
+    <form method="post" asp-action="EditProfile" asp-controller="Account">
+
+        <div class="form-add">
+            <label asp-for="Name" class="form-label"></label>
+            <input type="text" asp-for="Name" autocomplete="off" class="form-input"/>
+        </div>
+
+        <span asp-validation-for="Name"></span>
+        <div class="form-add">
+            <label asp-for="Surname" class="form-label"></label>
+           <input type="text" asp-for="Surname" autocomplete="off" class="form-input"/>
+         
+        </div>
+        <span asp-validation-for="Surname"></span>
+
+        <div class="form-add">
+            <label asp-for="Street" class="form-label"></label>
+            <input type="text" asp-for="Street" autocomplete="off" class="form-input"/>
+        </div>
+        <span asp-validation-for="Street"></span>
+
+        <div class="form-add">
+            <label asp-for="BuildingNumber" class="form-label"></label>
+             <input type="text" asp-for="BuildingNumber" autocomplete="off" class="form-input"/>
+        </div>
+        <span asp-validation-for="BuildingNumber"></span>
+
+        <div class="form-add">
+             <label asp-for="ZIPCode" class="form-label"></label>
+            <input type="text" asp-for="ZIPCode" autocomplete="off" class="form-input"/>
+        </div>
+        <span asp-validation-for="ZIPCode"></span>
+
+        <div class="form-add">
+            <label asp-for="City" class="form-label"></label>
+            <input type="text" asp-for="City" autocomplete="off" class="form-input"/>
+        </div>
+        <span asp-validation-for="City"></span>
+
+        <div class="form-add">
+            <label asp-for="PhoneNumber" class="form-label"></label>
+            <input type="number" asp-for="PhoneNumber" autocomplete="off" class="form-input"/>
+        </div>
+        <span asp-validation-for="PhoneNumber"></span>
+
+        <div class="form-add">
+            <label asp-for="Company" class="form-label"></label>
+            <input type="text" asp-for="Company" autocomplete="off" class="form-input"/>
+        </div>
+        <span asp-validation-for="Company"></span>
+
+         <div class="form-add">
+            <label asp-for="NIP" class="form-label"></label>
+            <input type="text" asp-for="NIP" autocomplete="off" class="form-input"/>
+        </div>
+        <span asp-validation-for="NIP"></span>
+
+        <div class="form-add">
+            <label asp-for="Email" class="form-label"></label>
+            <input type="email" asp-for="Email" autocomplete="off" class="form-input"/>
+        </div>
+        <span asp-validation-for="Email"></span>
+
+        <div style="width: 100%; text-align: center;">
+            <input type="submit" value="ZMIEŃ DANE" class="register-button"/>
+        </div>
+</form>
+
+<form method="post" asp-action="EditPassword" asp-controller="Account">
+   
+         <hr style="width: 95%; margin-right: auto; margin-left: auto;"/>
+
+        <h1 class="new-project">Zmiana hasła</h1>
+
+        <div class="form-add">
+            <label asp-for="Password" class="form-label"></label>
+            <input type="password" asp-for="Password" autocomplete="off" class="form-input"/>
+        </div>
+        <span asp-validation-for="Password"></span>
+       
+        <div class="form-add">
+            <label asp-for="ConfirmPassword" class="form-label"></label>
+            <input type="password" asp-for="ConfirmPassword" autocomplete="off" class="form-input"/>
+        </div>
+        <span asp-validation-for="ConfirmPassword"></span>
+      
+         <div style="width: 100%; text-align: center;">
+            <input type="submit" value="ZMIEŃ HASŁO" class="register-button"/>
+        </div>
+</form>
+</div>

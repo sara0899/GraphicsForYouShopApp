@@ -1,0 +1,89 @@
+﻿@model GraphicsForYouShopApp.Models.Promotion;
+@using GraphicsForYouShopApp.Models;
+@{
+    ViewData["Title"] = "Dodaj nową promocję";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="projects-container">
+    <h1 class="new-project">Dodaj promocję na wszystkie projekty</h1>
+        
+    <form method="post" asp-action="AddPromotionToAll" class="register-form" enctype = "multipart/form-data">
+        <div class="form-add">
+            <label asp-for="Name" class="form-label"></label>
+            <input type="text" asp-for="Name" autocomplete="off" class="form-input" />
+            <span asp-validation-for="Name"></span>
+        </div>
+
+        <div class="form-add">
+            <label asp-for="Percentage" class="form-label"></label>
+            <input type="number" asp-for="Percentage" autocomplete="off" class="form-input" />
+            <span asp-validation-for="Percentage"></span>
+        </div>
+        
+
+        <div class="form-add">
+            <label asp-for="DateFrom" class="form-label"></label>
+           <input type="date" asp-for="DateFrom" autocomplete="off" class="form-input" />
+            <span asp-validation-for="DateFrom"></span>
+        </div>
+
+        <div class="form-add">
+            <label asp-for="DateTo" class="form-label"></label>
+           <input type="date" asp-for="DateTo" autocomplete="off" class="form-input" />
+            <span asp-validation-for="DateTo"></span>
+        </div>
+
+        <div style="width: 100%; text-align: center;">
+            <input type="submit" value="DODAJ" class="register-button"/>
+        </div>
+    </form>
+
+    <hr style="width: 100%; margin-left: auto; margin-right: auto;margin-top: 1em; margin-bottom: 1em"/>
+    <h1 class="new-project">Dodaj promocję na wybrane projekty</h1>
+   
+    <form method="post" asp-action="AddPromotionToChosen" class="register-form" enctype = "multipart/form-data">
+        <div class="form-add">
+            <label asp-for="Name" class="form-label"></label>
+            <input type="text" asp-for="Name" autocomplete="off" class="form-input" />
+            <span asp-validation-for="Name"></span>
+        </div>
+
+        <div class="form-add">
+            <label asp-for="Percentage" class="form-label"></label>
+            <input type="number" asp-for="Percentage" autocomplete="off" class="form-input" />
+            <span asp-validation-for="Percentage"></span>
+        </div>
+        
+
+        <div class="form-add">
+            <label asp-for="DateFrom" class="form-label"></label>
+           <input type="date" asp-for="DateFrom" autocomplete="off" class="form-input" />
+            <span asp-validation-for="DateFrom"></span>
+        </div>
+
+        <div class="form-add">
+            <label asp-for="DateTo" class="form-label"></label>
+           <input type="date" asp-for="DateTo" autocomplete="off" class="form-input" />
+            <span asp-validation-for="DateTo"></span>
+        </div>
+
+        <h2 class="new-project">Wybierz projekty objęte promocją</h2>
+        <input type="hidden" name="graphics" id="graphicsChosen"/>
+        @foreach (Graphic graphic in ViewBag.graphicList)
+        {
+            <div class="choose-graphic"><input type="checkbox" name="graphicWithPromotion" value="@graphic.Id" id='graphic+@graphic.Id'>
+                <div class="checkout-photo" style="margin-left: 2em;">
+                            <img src="~/Images/@graphic.MainPictureUrl"/>
+                </div>
+                <div>
+                    <a asp-action="GraphicView" asp-controller="Graphic" asp-route-Id="@graphic.Id">@graphic.Name</a>
+                </div>
+            </div> 
+        }
+
+        <div style="width: 100%; text-align: center;">
+            <input type="submit" value="DODAJ" onclick="AddGraphicsToPromotion()" class="register-button"/>
+        </div>
+    </form>
+</div>
